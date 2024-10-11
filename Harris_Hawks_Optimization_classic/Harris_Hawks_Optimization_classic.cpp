@@ -81,16 +81,17 @@ struct HHO {
     vector<hawk> hawks;
 };
 
-double rand(double low, double high) {
+mt19937 initialization_rand() {
     random_device rand_number;
-    mt19937 generator(rand_number());
+    return mt19937(rand_number());
+}
+
+double rand_real(mt19937& generator, double low, double high) {
     uniform_real_distribution<double> range(low, high);
     return range(generator);
 }
 
-int rand(int low, int high) {
-    random_device rand_number;
-    mt19937 generator(rand_number());
+int rand_int(mt19937& generator, int low, int high) {
     uniform_int_distribution<int> range(low, high);
     return range(generator);
 }
@@ -117,10 +118,8 @@ double rand_kronnecker(int index, int dimension) {
 
 double fitness(HHO* hho, int i) {
     double sum = 0.0;
-    for (int n = 0; n < hho->size; n++) {
-        for (int j = 0; j < hho->dimension; j++) {
-            sum += pow(hho->hawks[i].X[j], 2.0);
-        }
+    for (int j = 0; j < hho->dimension; j++) {
+        sum += pow(hho->hawks[i].X[j], 2.0);
     }
     return sum;
 }
@@ -133,6 +132,14 @@ double fitness(HHO* hho, hawk hawk) {
         }
     }
     return sum;
+}
+
+void update_all_fitness(HHO* hho) {
+    for (int i = 0; i < hho->size; i++) {
+        for (int j = 0; j < hho->dimension; j++) {
+            hho->hawks[i].X[j] = fitness(hho, i);
+        }
+    }
 }
 
 HHO* initialization_hawks(int T, int size, double x_max, double x_min, int dimension) {
@@ -148,21 +155,12 @@ HHO* initialization_hawks(int T, int size, double x_max, double x_min, int dimen
     for (int i = 0; i < size; i++) {
         hho->hawks[i].X.resize(dimension);
         for (int j = 0; j < dimension; j++) {
-            hho->hawks[i].X[j] = rand_kronnecker(i, j);
+            hho->hawks[i].X[j] = rand_kronnecker(i + 1, j + 1);
         }
         hho->hawks[i].fitness = fitness(hho, i);
     }
 
     return hho;
-}
-
-
-void update_all_fitness(HHO* hho) {
-    for (int i = 0; i < hho->size; i++) {
-        for (int j = 0; j < hho->dimension; j++) {
-            hho->hawks[i].X[j] = fitness(hho, i);
-        }
-    }
 }
 
 hawk best_hawk(HHO* hho) {
@@ -175,14 +173,14 @@ hawk best_hawk(HHO* hho) {
     return best_hawk;
 }
 
-double calculate_energy(HHO* hho, int t) {
+double calculate_energy(HHO* hho, int t, mt19937& generator) {
     double E;
     if (t <= hho->T / 2)
         E = cos(_Pi * (static_cast<double>(t) / hho->T + 0.5) + 2.0);
     else
         E = cos(_Pi * pow((static_cast<double>(t) / hho->T - 0.5), 1.0 / 3));
 
-    return fabs(E * (2.0 * rand(0.0, 1.0) - 1.0));
+    return fabs(E * (2.0 * rand_real(generator, 0.0, 1.0) - 1.0));
 }
 
 hawk calculate_Xm(HHO* hho) {
@@ -193,17 +191,17 @@ hawk calculate_Xm(HHO* hho) {
     return average_hawk / hho->size;
 }
 
-void very_high_energy(HHO* hho, int index) {
-    double q = rand(0.0, 1.0);
+void very_high_energy(HHO* hho, int index, mt19937& generator) {
+    double q = rand_real(generator, 0.0, 1.0);
     if (q >= 0.5) {
-        int rand_index = rand(0, hho->size - 1);
+        int rand_index = rand_int(generator, 0, hho->size - 1);
         hawk rand_hawk = hho->hawks[rand_index];
-        hawk hawk_deviation = (rand_hawk - hho->hawks[index] * 2.0 * rand(0.0, 1.0)).fabs();
-        hho->hawks[index] = rand_hawk - hawk_deviation * rand(0.0, 1.0);
+        hawk hawk_deviation = (rand_hawk - hho->hawks[index] * 2.0 * rand_real(generator, 0.0, 1.0)).fabs();
+        hho->hawks[index] = rand_hawk - hawk_deviation * rand_real(generator, 0.0, 1.0);
     }
     else {
         hawk averege_hawk = calculate_Xm(hho), leader_hawk = best_hawk(hho);
-        double correction = rand(0.0, 1.0) * (hho->x_min + rand(0.0, 0.1) * (hho->x_max - hho->x_min));
+        double correction = rand_real(generator, 0.0, 1.0) * rand_real(generator, 0.0, 1.0) * (hho->x_max - hho->x_min);
         hho->hawks[index] = leader_hawk - averege_hawk - correction;
     }
 }
@@ -226,30 +224,35 @@ hawk better(HHO* hho, hawk f_hawk, hawk s_hawk) {
     return s_hawk;
 }
 
-double levy_flight(HHO* hho, int dimension) {
-    double u = rand(hho->x_min, hho->x_max), v = rand(hho->x_min, hho->x_max);
+double levy_flight(HHO* hho, int dimension, mt19937& generator) {
+    double u = rand_real(generator, hho->x_min, hho->x_max), v = rand_real(generator, hho->x_min, hho->x_max);
     double numerator = tgamma(1.0 + beta) * sin((_Pi * beta) / 2.0);
     double denominator = tgamma((1.0 + beta) / 2.0) * beta * pow(2.0, (beta - 1.0) / 2.0);
     double sigma = pow(numerator / denominator, 1.0 / beta);
     return 0.01 * ((u * sigma) / pow(fabs(v), 1.0 / beta));
 }
 
-void high_energy_low_chance(HHO* hho, int index, double E) {
+void high_energy_low_chance(HHO* hho, int index, double E, mt19937& generator) {
     hawk leader_hawk = best_hawk(hho);
     hawk y_hawk = leader_hawk - (leader_hawk * J - hho->hawks[index]).fabs() * E;
-    hawk rand_hawk;
-    for (int i = 0; i < hho->dimension; i++) rand_hawk.X[i] = rand(hho->x_min, hho->x_max);
-    hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, hho->dimension);
+    hawk rand_hawk(0.0, hho->dimension);
+    for (int i = 0; i < hho->dimension; i++) {
+        double rand_num = rand_real(generator, hho->x_min, hho->x_max);
+        rand_hawk.X[i] = rand_num;
+    }
+    hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, hho->dimension, generator);
     hho->hawks[index] = better(hho, y_hawk, z_hawk);
 }
 
-void low_energy_low_chance(HHO* hho, int index, double E) {
+void low_energy_low_chance(HHO* hho, int index, double E, mt19937& generator) {
     hawk leader_hawk = best_hawk(hho);
     hawk averege_hawk = calculate_Xm(hho);
-    hawk rand_hawk;
-    for (int i = 0; i < hho->dimension; i++) rand_hawk.X[i] = rand(hho->x_min, hho->x_max);
+    hawk rand_hawk(0.0, hho->dimension);
+    for (int i = 0; i < hho->dimension; i++) {
+        rand_hawk.X[i] = rand_real(generator, hho->x_min, hho->x_max);
+    }
     hawk y_hawk = leader_hawk - (leader_hawk * J - averege_hawk).fabs() * E;
-    hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, hho->dimension);
+    hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, hho->dimension, generator);
     hho->hawks[index] = better(hho, y_hawk, z_hawk);
 }
 
@@ -265,25 +268,25 @@ void delete_data(HHO* hho) {
 }
 
 void harris_hawks_optimazation(int T, int size, double x_max, double x_min, int dimension) {
+    mt19937 generator = initialization_rand();
     HHO* hho = initialization_hawks(T, size, x_max, x_min, dimension);
     hawk best_solution;
     for (int t = 0; t < T; t++) {
-        update_all_fitness(hho);
         for (int i = 0; i < size; i++) {
-            double r = rand(0.0, 1.0);
-            double E = calculate_energy(hho, t);
-            if (E >= 1) very_high_energy(hho, i);
+            double r = rand_real(generator, 0.0, 1.0);
+            double E = calculate_energy(hho, t, generator);
+            if (E >= 1) very_high_energy(hho, i, generator);
             else {
-                double q = rand(0.0, 1.0);
+                double q = rand_real(generator, 0.0, 1.0);
                 if (E >= 0.5 && q >= 0.5) high_energy_high_chance(hho, i, E);
                 else if (E < 0.5 && q >= 0.5) low_energy_high_chance(hho, i, E);
-                else if (E >= 0.5 && q < 0.5) high_energy_low_chance(hho, i, E);
-                else if (E < 0.5 && q < 0.5) low_energy_low_chance(hho, i, E);
+                else if (E >= 0.5 && q < 0.5) high_energy_low_chance(hho, i, E, generator);
+                else if (E < 0.5 && q < 0.5) low_energy_low_chance(hho, i, E, generator);
             }
             hho->hawks[i].fitness = fitness(hho, i);
         }
         best_solution = best_hawk(hho);
-        cout << "iteration" << t << best_solution << endl;
+        cout << "iteration: " << t << " " << best_solution << endl;
     }
     best_solution = best_hawk(hho);
     cout << best_solution << endl;
@@ -291,7 +294,11 @@ void harris_hawks_optimazation(int T, int size, double x_max, double x_min, int 
 }
 
 int main(){
+    
+    int T = 100, size = 100, dimension = 5;
+    double x_max = 1.0, x_min = -1.0;
+    harris_hawks_optimazation(T, size, x_max, x_min, dimension);
+    //initialization_hawks(T, size, x_max, x_min, dimension);
 
-    harris_hawks_optimazation(100, 1000, -100.0, +100.0, 3);
     return 0;
 }
