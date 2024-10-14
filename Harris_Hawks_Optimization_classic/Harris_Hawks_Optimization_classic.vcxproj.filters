@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="kronnecker.h">
+    <ClInclude Include="halton_sequence.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

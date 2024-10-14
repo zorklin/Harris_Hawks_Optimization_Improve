@@ -130,7 +130,7 @@
     <ClCompile Include="Harris_Hawks_Optimization_classic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="kronnecker.h" />
+    <ClInclude Include="halton_sequence.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
