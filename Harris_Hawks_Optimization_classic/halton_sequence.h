@@ -20,13 +20,13 @@ std::vector<int> sieve_eratosthenes(int size) {
     return primes;
 }
 
-std::vector<double> halton_sequence(int index, const std::vector<int>& bases) {
-    std::vector<double> point(bases.size());
+std::vector<long double> halton_sequence(int index, const std::vector<int>& bases) {
+    std::vector<long double> point(bases.size());
 
     for (size_t i = 0; i < bases.size(); i++) {
         int base = bases[i];
-        double position = 1.0;
-        double result = 0.0;
+        long double position = 1.0;
+        long double result = 0.0;
         int current = index + 1;
 
         while (current > 0) {

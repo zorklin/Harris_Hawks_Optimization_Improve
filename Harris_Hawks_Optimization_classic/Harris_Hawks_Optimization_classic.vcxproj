@@ -130,6 +130,7 @@
     <ClCompile Include="Harris_Hawks_Optimization_classic.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="benchmark_function.h" />
     <ClInclude Include="halton_sequence.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
