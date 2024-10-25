@@ -1,53 +1,43 @@
 #pragma once
 
-#include <cmath>
 #include <vector>
-#include <random>
 
-#define SIZE_BENCHMARK_FUNCTION 5
+#define QUANTITY_BENCHMARK_FUNCTIONS 30
 
-using benchmark_function = double(*)(std::vector<double>);
+using benchmark_function = long double(*)(std::vector<long double>);
 
-double benchmark_f1(std::vector<double> point) {
-	double sum = 0.0;
-	for (int i = 0; i < point.size(); i++) {
-		sum += pow(point[i], 2.0);
-	}
-	return sum;
-}
+std::vector<benchmark_function> get_all_functions();
+std::vector<long double> get_borders(int dimension);
 
-double benchmark_f2(std::vector<double> point) {
-	double sum = 0.0;
-	for (int i = 0; i < point.size(); i++) {
-		sum += i * pow(point[i], 2.0);
-	}
-	return sum;
-}
+long double benchmark_f1(std::vector<long double> values);
+long double benchmark_f2(std::vector<long double> values);
+long double benchmark_f3(std::vector<long double> values);
+long double benchmark_f4(std::vector<long double> values);
+long double benchmark_f5(std::vector<long double> values);
+long double benchmark_f6(std::vector<long double> values);
+long double benchmark_f7(std::vector<long double> values);
+long double benchmark_f8(std::vector<long double> values);
+long double benchmark_f9(std::vector<long double> values);
+long double benchmark_f10(std::vector<long double> values);
 
-double benchmark_f3(std::vector<double> point) {
-	double sum = 0.0;
-	for (int i = 0; i < point.size(); i++) {
-		sum += pow(fabs(point[i]), i + 2);
-	}
-	return sum;
-}
+long double benchmark_f11(std::vector<long double> values);
+long double benchmark_f12(std::vector<long double> values);
+long double benchmark_f13(std::vector<long double> values);
+long double benchmark_f14(std::vector<long double> values);
+long double benchmark_f15(std::vector<long double> values);
+long double benchmark_f16(std::vector<long double> values);
+long double benchmark_f17(std::vector<long double> values);
+long double benchmark_f18(std::vector<long double> values);
+long double benchmark_f19(std::vector<long double> values);
+long double benchmark_f20(std::vector<long double> values);
 
-double benchmark_f4(std::vector<double> point) {
-	double sum = 0.0;
-	for (int i = 0; i < point.size(); i++) {
-		sum += fabs(pow(point[i], 5.0) - 3.0 * pow(point[i], 4.0) + 4 * pow(point[i], 3.0) + 2 * pow(point[i], 2.0) - 10 * point[i] - 4.0);
-	}
-	return sum;
-}
-
-double benchmark_f5(std::vector<double> point) {
-	double sum = 0.0;
-	for (int i = 0; i < point.size(); i++) {
-		sum += pow(point[i], 2.0);
-	}
-	return 1.0 - ((1.0 + cos(12.0 * sqrt(sum))) / (0.5 * sum + 2.0));
-}
-
-std::vector<benchmark_function> initialize_benchmark_functions() {
-	return { benchmark_f1, benchmark_f2, benchmark_f3, benchmark_f4, benchmark_f5 };
-}
+long double benchmark_f21(std::vector<long double> values);
+long double benchmark_f22(std::vector<long double> values);
+long double benchmark_f23(std::vector<long double> values);
+long double benchmark_f24(std::vector<long double> values);
+long double benchmark_f25(std::vector<long double> values);
+long double benchmark_f26(std::vector<long double> values);
+long double benchmark_f27(std::vector<long double> values);
+long double benchmark_f28(std::vector<long double> values);
+long double benchmark_f29(std::vector<long double> values);
+long double benchmark_f30(std::vector<long double> values);

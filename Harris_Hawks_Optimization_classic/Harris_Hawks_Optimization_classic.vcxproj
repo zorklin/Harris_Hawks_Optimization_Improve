@@ -127,11 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="benchmark_function.cpp" />
+    <ClCompile Include="halton_sequence.cpp" />
     <ClCompile Include="Harris_Hawks_Optimization_classic.cpp" />
+    <ClCompile Include="HHO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmark_function.h" />
     <ClInclude Include="halton_sequence.h" />
+    <ClInclude Include="HHO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
