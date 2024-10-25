@@ -39,7 +39,7 @@ int main(){
             long double best_value = INFINITY;
             long double averege = 0.0l;
             vector<long double> answers;
-            answers.resize(dimension[i]);
+            answers.resize(QUANTITY_RUNS);
             for (int k = 0; k < QUANTITY_RUNS; k++) {
                 int T = dimension[i] * 100, size = dimension[i] * 20;
                 vector<long double> answer = harris_hawks_optimazation(T, size, borders[j], -borders[j], dimension[i], test_function[j]);

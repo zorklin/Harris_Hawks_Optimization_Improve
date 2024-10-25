@@ -1,4 +1,5 @@
-QUANTITY_RUNS: 1
+QUANTITY_RUNS: 10
 
 Dimension: 5
-Function: 1, Averege: 1.57317e-149, Best: 7.86586e-149, Deviation: 3.14634e-149
+Function: 1, Averege: 2.12632e-130, Best: 6.49906e-152, Deviation: 3.34648e-130
+Function: 2, Averege: 4.14974e-127, Best: 1.7481e-152, Deviation: 6.56082e-127
