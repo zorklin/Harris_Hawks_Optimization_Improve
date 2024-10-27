@@ -8,7 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
-#define QUANTITY_RUNS 3
+#define QUANTITY_RUNS 5
 
 long double calculate_deviation(vector<long double> values, long double mean) {
     size_t size = values.size();
@@ -45,7 +45,6 @@ int main() {
             vector<long double> answers;
             answers.resize(QUANTITY_RUNS);
             double total_duration = 0.0;
-            long double rank_function = 0.0;
             for (int k = 0; k < QUANTITY_RUNS; k++) {
                 int T = dimension[i] * 100, size = dimension[i] * 20;
                 high_resolution_clock::time_point start = high_resolution_clock::now();
@@ -58,30 +57,27 @@ int main() {
                 averege += temp;
                 best_value = min(best_value, temp);
                 answers[k] = temp;
-                rank_function += fabs(temp);
             }
             averege /= QUANTITY_RUNS;
             long double deviation = calculate_deviation(answers, averege);
             double average_time_s = total_duration / QUANTITY_RUNS;
-            rank_dimension += rank_function;
+            rank_dimension += averege;
             cout << "Function: " << j + 1
                 << ", Averege: " << averege
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
-                << ", Average Time: " << average_time_s << " s"
-                << ", Rank: " << rank_function << endl;
+                << ", Average Time: " << average_time_s << " s" << endl;
 
             file << "Function: " << j + 1
                 << ", Averege: " << averege
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
-                << ", Average Time: " << average_time_s << " s"
-                << ", Rank: " << rank_function << endl;
+                << ", Average Time: " << average_time_s << " s" << endl;
         }
-        total_rank += rank_dimension;
+        total_rank += rank_dimension / QUANTITY_RUNS;
         cout << "Rand dimension:" << rank_dimension;
     }
-    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl << "Total rank: " << total_rank << endl;
+    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl << "Total rank: " << total_rank / dimension.size() << endl;
 
     return 0;
 }

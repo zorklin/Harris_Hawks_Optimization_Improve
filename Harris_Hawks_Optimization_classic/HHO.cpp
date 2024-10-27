@@ -70,10 +70,9 @@ hawk calculate_Xm(HHO* hho) {
 }
 
 long double calculate_energy(HHO* hho, int t, std::mt19937& generator) {
-    long double E = pow(cos(PI * static_cast<long double>(t) / hho->T), 5.0l) + 1.0l;
+    long double E = pow(cos(PI * pow(static_cast<long double>(t) / hho->T, 2.0l / 3.0l)), 5.0l) + 1.0l;
     return E * rand_real(generator, -1.0, 1.0);
 }
-
 
 void very_high_energy(HHO* hho, int index, hawk leader_hawk, hawk averege_hawk, std::mt19937& generator) {
     long double q = rand_real(generator, 0.0l, 1.0l);
@@ -193,8 +192,8 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
         hawk average_hawk = calculate_Xm(hho);
         if (stagnation > 15.0l) {
             gaussian_walk_learning(hho, t, leader_hawk, generator);
-            long double E = calculate_energy(hho, t, generator);
             for (int i = 0; i < size; i++) {
+                long double E = calculate_energy(hho, t, generator);
                 very_high_energy(hho, i, leader_hawk, average_hawk, generator);
                 border_correction(hho, i);
                 hho->hawks[i].fitness = hho->fitness(hho->hawks[i].X);
@@ -202,8 +201,8 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
             stagnation = 0;
         }
         else {
-            long double E = calculate_energy(hho, t, generator);
             for (int i = 0; i < size; i++) {
+                long double E = calculate_energy(hho, t, generator);
                 if (fabs(E) >= 1.0l) very_high_energy(hho, i, leader_hawk, average_hawk, generator);
                 else {
                     long double q = rand_real(generator, 0.0l, 1.0l);
