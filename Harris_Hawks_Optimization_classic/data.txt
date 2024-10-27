@@ -1,4 +1,16 @@
-QUANTITY_RUNS: 1
+QUANTITY_RUNS: 3
 
-Dimension: 30
-Function: 1, Averege: 1.66253e-250, Best: 1.66253e-250, Deviation: 0, Average Time: 57.8917 s
+Dimension: 5
+Function: 1, Averege: 1.13514e-148, Best: 3.63443e-202, Deviation: 1.60533e-148, Average Time: 2.24596 s, Rank: 3.40542e-148
+Function: 2, Averege: 1.90228e-166, Best: 2.13554e-192, Deviation: 0, Average Time: 2.20492 s, Rank: 5.70683e-166
+Function: 3, Averege: 1.71578e-272, Best: 3.51825e-284, Deviation: 0, Average Time: 2.12888 s, Rank: 5.14733e-272
+Function: 4, Averege: 0.000105964, Best: 1.11911e-08, Deviation: 0.000149839, Average Time: 2.50411 s, Rank: 0.000317891
+Function: 5, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.10227 s, Rank: 0
+Function: 6, Averege: 0, Best: 0, Deviation: 0, Average Time: 9.19034 s, Rank: 0
+Function: 7, Averege: 5.64325e-94, Best: 6.08679e-98, Deviation: 7.94594e-94, Average Time: 2.13093 s, Rank: 1.69298e-93
+Function: 8, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.43142 s, Rank: 0
+Function: 9, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.26505 s, Rank: 0
+Function: 10, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.1265 s, Rank: 0
+Function: 11, Averege: 0.0453367, Best: 0.0138919, Deviation: 0.036126, Average Time: 2.23028 s, Rank: 0.13601
+Function: 12, Averege: 0.144898, Best: 0.125176, Deviation: 0.0207743, Average Time: 2.24329 s, Rank: 0.434693
+Function: 13, Averege: 0.000146852, Best: 3.11505e-10, Deviation: 0.000207647, Average Time: 2.41026 s, Rank: 0.000440556

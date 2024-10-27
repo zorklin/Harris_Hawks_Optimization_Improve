@@ -218,7 +218,7 @@ long double benchmark_f21(std::vector<long double> values) {
 	for (int i = 0; i < size; i++) {
 		sum += values[i] * sin(sqrt(fabs(values[i])));
 	}
-	return -sum * 418.9828872724337l * size;
+	return -sum + 418.9828872724337l * size;
 }
 
 long double benchmark_f22(std::vector<long double> values) {

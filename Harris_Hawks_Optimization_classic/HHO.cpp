@@ -6,6 +6,7 @@
 
 constexpr double long beta = 1.5l;
 constexpr long double PI = 3.141592653589793238462643383279502884l;
+constexpr long double E = 2.71828182845904523536028747135266249775724709369995L;
 
 std::mt19937 initialization_rand() {
     std::random_device rand_number;
@@ -60,13 +61,6 @@ hawk best_hawk(HHO* hho) {
     return best_hawk;
 }
 
-long double calculate_energy(HHO* hho, int t, std::mt19937& generator) {
-    long double E;
-    if (t <= hho->T / 2.0l) E = cos(PI * (static_cast<long double>(t) / hho->T + 0.5l) + 2.0l);
-    else E = cos(PI * pow((static_cast<long double>(t) / hho->T - 0.5l), 1.0l / 3.0l));
-    return E * (2.0l * rand_real(generator, 0.0l, 1.0l) - 1.0l);
-}
-
 hawk calculate_Xm(HHO* hho) {
     hawk average_hawk(0.0l, hho->dimension);
     for (int i = 0; i < hho->size; i++) {
@@ -74,6 +68,12 @@ hawk calculate_Xm(HHO* hho) {
     }
     return average_hawk / hho->size;
 }
+
+long double calculate_energy(HHO* hho, int t, std::mt19937& generator) {
+    long double E = pow(cos(PI * static_cast<long double>(t) / hho->T), 5.0l) + 1.0l;
+    return E * rand_real(generator, -1.0, 1.0);
+}
+
 
 void very_high_energy(HHO* hho, int index, hawk leader_hawk, hawk averege_hawk, std::mt19937& generator) {
     long double q = rand_real(generator, 0.0l, 1.0l);

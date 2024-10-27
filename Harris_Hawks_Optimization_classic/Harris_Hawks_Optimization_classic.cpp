@@ -8,7 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
-#define QUANTITY_RUNS 1
+#define QUANTITY_RUNS 3
 
 long double calculate_deviation(vector<long double> values, long double mean) {
     size_t size = values.size();
@@ -33,16 +33,19 @@ int main() {
 
     cout << "QUANTITY_RUNS: " << QUANTITY_RUNS << endl;
     file << "QUANTITY_RUNS: " << QUANTITY_RUNS << endl;
+    long double total_rank = 0.0l;
     for (int i = 0; i < dimension.size(); i++) {
         cout << endl << "Dimension: " << dimension[i] << endl;
         file << endl << "Dimension: " << dimension[i] << endl;
         vector<long double> borders = get_borders(dimension[i]);
+        long double rank_dimension = 0.0l;
         for (int j = 0; j < QUANTITY_BENCHMARK_FUNCTIONS; j++) {
             long double best_value = INFINITY;
             long double averege = 0.0l;
             vector<long double> answers;
             answers.resize(QUANTITY_RUNS);
             double total_duration = 0.0;
+            long double rank_function = 0.0;
             for (int k = 0; k < QUANTITY_RUNS; k++) {
                 int T = dimension[i] * 100, size = dimension[i] * 20;
                 high_resolution_clock::time_point start = high_resolution_clock::now();
@@ -55,24 +58,30 @@ int main() {
                 averege += temp;
                 best_value = min(best_value, temp);
                 answers[k] = temp;
+                rank_function += fabs(temp);
             }
             averege /= QUANTITY_RUNS;
             long double deviation = calculate_deviation(answers, averege);
             double average_time_s = total_duration / QUANTITY_RUNS;
+            rank_dimension += rank_function;
             cout << "Function: " << j + 1
                 << ", Averege: " << averege
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
-                << ", Average Time: " << average_time_s << " s" << endl;
+                << ", Average Time: " << average_time_s << " s"
+                << ", Rank: " << rank_function << endl;
 
             file << "Function: " << j + 1
                 << ", Averege: " << averege
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
-                << ", Average Time: " << average_time_s << " s" << endl;
+                << ", Average Time: " << average_time_s << " s"
+                << ", Rank: " << rank_function << endl;
         }
+        total_rank += rank_dimension;
+        cout << "Rand dimension:" << rank_dimension;
     }
-    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl;
+    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl << "Total rank: " << total_rank << endl;
 
     return 0;
 }
