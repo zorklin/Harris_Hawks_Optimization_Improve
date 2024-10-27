@@ -121,7 +121,7 @@ void high_energy_low_chance(HHO* hho, int t, int index, long double E, hawk lead
         rand_hawk.X[i] = rand_real(generator, hho->min, hho->max);
     }
     hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, generator);
-    hho->hawks[index] = better(hho, y_hawk, z_hawk);
+    hho->hawks[index] = better(hho, better(hho, y_hawk, hho->hawks[index]), z_hawk);
 }
 
 void low_energy_low_chance(HHO* hho, int t, int index, long double E, hawk leader_hawk, hawk averege_hawk, std::mt19937& generator) {
@@ -132,7 +132,7 @@ void low_energy_low_chance(HHO* hho, int t, int index, long double E, hawk leade
     }
     hawk y_hawk = leader_hawk - (leader_hawk * J - averege_hawk).module_number() * E;
     hawk z_hawk = y_hawk + rand_hawk * levy_flight(hho, generator);
-    hho->hawks[index] = better(hho, y_hawk, z_hawk);
+    hho->hawks[index] = better(hho, better(hho, y_hawk, hho->hawks[index]), z_hawk);
 }
 
 void elite_opposition_based_learning(HHO* hho, std::mt19937& generator) {
@@ -193,13 +193,13 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
         hawk average_hawk = calculate_Xm(hho);
         if (stagnation > 15.0l) {
             gaussian_walk_learning(hho, t, leader_hawk, generator);
-            stagnation = 0;
             long double E = calculate_energy(hho, t, generator);
             for (int i = 0; i < size; i++) {
                 very_high_energy(hho, i, leader_hawk, average_hawk, generator);
                 border_correction(hho, i);
                 hho->hawks[i].fitness = hho->fitness(hho->hawks[i].X);
             }
+            stagnation = 0;
         }
         else {
             long double E = calculate_energy(hho, t, generator);
@@ -216,7 +216,7 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
                 hho->hawks[i].fitness = hho->fitness(hho->hawks[i].X);
             }
         }
-        hawk iter_solution = best_hawk(hho);
+        hawk iter_solution = leader_hawk;
         stagnation += cos(PI / 3.0l * cbrt(static_cast<long double>(t) / T));
         if (iter_solution.fitness < best_solution.fitness) {
             stagnation = 0;

@@ -9,13 +9,14 @@
 struct hawk {
     std::vector<long double> X;
     long double fitness;
-
+    
     hawk() : fitness(0.0) {}
     hawk(long double value, size_t size) : X(size, value), fitness(0) {}
     hawk(const std::vector<long double>& values) : X(values), fitness(0) {}
 
     hawk operator+(const hawk& other) const {
         hawk new_hawk = *this;
+        
         std::transform(X.begin(), X.end(), other.X.begin(), new_hawk.X.begin(), std::plus<>());
         return new_hawk;
     }
