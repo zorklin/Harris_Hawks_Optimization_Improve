@@ -1,3 +1,7 @@
 QUANTITY_RUNS: 1
 
 Dimension: 5
+Function: 1, Averege: 3.38477e-260, Best: 3.38477e-260, Deviation: 0, Average Time: 11.4142 s
+Function: 2, Averege: 5.0827e-258, Best: 5.0827e-258, Deviation: 0, Average Time: 10.7267 s
+Function: 3, Averege: 4.94066e-324, Best: 4.94066e-324, Deviation: 0, Average Time: 11.2708 s
+Function: 4, Averege: 4.44089e-16, Best: 4.44089e-16, Deviation: 0, Average Time: 13.2501 s

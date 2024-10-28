@@ -4,7 +4,7 @@
 #include "HHO.h"
 #include <algorithm>
 
-constexpr double long beta = 1.5l;
+constexpr long double beta = 1.5l;
 constexpr long double PI = 3.141592653589793238462643383279502884l;
 constexpr long double E = 2.71828182845904523536028747135266249775724709369995l;
 constexpr long double POWER_STAGNATION = 15.0l;
