@@ -182,7 +182,7 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
         elite_opposition_based_learning(hho, generator);
         hawk leader_hawk = best_hawk(hho);
         hawk average_hawk = calculate_Xm(hho);
-        if (stagnation > 15.0l) {
+        if (stagnation > POWER_STAGNATION) {
             gaussian_walk_learning(hho, t, leader_hawk, generator);
             for (int i = 0; i < size; i++) {
                 long double E = calculate_energy(hho, t, generator);

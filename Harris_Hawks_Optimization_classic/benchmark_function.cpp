@@ -270,7 +270,7 @@ long double benchmark_f26(std::vector<long double> values) {
 }
 
 long double benchmark_f27(std::vector<long double> values) {
-	const long double d = 2.0l, a = 0.2l;
+	const long double d = 2.0l, a = 0.1l;
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 1; i < size; i++) {

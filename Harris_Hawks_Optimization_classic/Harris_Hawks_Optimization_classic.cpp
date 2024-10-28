@@ -8,7 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
-#define QUANTITY_RUNS 10
+#define QUANTITY_RUNS 1
 
 long double calculate_deviation(vector<long double> values, long double mean) {
     size_t size = values.size();
