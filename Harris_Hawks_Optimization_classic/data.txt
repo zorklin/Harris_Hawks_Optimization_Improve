@@ -1,8 +1,8 @@
-QUANTITY_RUNS: 5
+QUANTITY_RUNS: 1
 
 Dimension: 5
-Function: 1, Averege: 1.51931e-241, Best: 8.99254e-244, Deviation: 0, Average Time: 2.54204 s
-Function: 2, Averege: 9.91966e-237, Best: 3.31991e-253, Deviation: 0, Average Time: 2.40819 s
-Function: 3, Averege: 3.37832e-319, Best: 0, Deviation: 0, Average Time: 2.47711 s
-Function: 4, Averege: 4.19533e-08, Best: 1.63584e-10, Deviation: 6.78165e-08, Average Time: 2.90633 s
-Function: 5, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.49202 s
+Function: 1, Averege: 3.05842e-237, Best: 3.05842e-237, Deviation: 0, Average Time: 2.42634 s
+Function: 2, Averege: 4.33464e-243, Best: 4.33464e-243, Deviation: 0, Average Time: 2.28223 s
+Function: 3, Averege: 1.59524e-314, Best: 1.59524e-314, Deviation: 0, Average Time: 2.38661 s
+Function: 4, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.58797 s
+Function: 5, Averege: 0, Best: 0, Deviation: 0, Average Time: 2.15591 s

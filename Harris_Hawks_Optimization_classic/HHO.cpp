@@ -6,7 +6,8 @@
 
 constexpr double long beta = 1.5l;
 constexpr long double PI = 3.141592653589793238462643383279502884l;
-constexpr long double E = 2.71828182845904523536028747135266249775724709369995L;
+constexpr long double E = 2.71828182845904523536028747135266249775724709369995l;
+constexpr long double POWER_STAGNATION = 15.0l;
 
 std::mt19937 initialization_rand() {
     std::random_device rand_number;
@@ -44,7 +45,6 @@ HHO initialization_hawks(int T, int size, long double max, long double min, int 
 }
 
 void border_correction(HHO& hho, int index) {
-    long double diff = hho.max - hho.min;
     for (int i = 0; i < hho.dimension; i++) {
         hho.hawks[index].X[i] = std::max(std::min(hho.hawks[index].X[i], hho.max), hho.min);
     }
@@ -52,7 +52,7 @@ void border_correction(HHO& hho, int index) {
 
 hawk best_hawk(HHO& hho) {
     hawk best_hawk = hho.hawks[0];
-    for (int i = 0; i < hho.size; i++) {
+    for (int i = 1; i < hho.size; i++) {
         if (hho.hawks[i].fitness < best_hawk.fitness) {
             best_hawk = hho.hawks[i];
         }
