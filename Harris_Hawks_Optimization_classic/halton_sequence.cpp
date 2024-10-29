@@ -2,7 +2,7 @@
 
 #include "halton_sequence.h"
 
-std::vector<int> sieve_eratosthenes(int size) {
+std::vector<int> sieve_eratosthenes(const int size) {
     int limit;
     if (size > 6) limit = static_cast<int>(size * (log(size) + log(log(size))));
     else limit = 15;
@@ -21,7 +21,7 @@ std::vector<int> sieve_eratosthenes(int size) {
     return primes;
 }
 
-std::vector<long double> halton_sequence(int index, const std::vector<int>& bases) {
+std::vector<long double> halton_sequence(const int index, const std::vector<int>& bases) {
     std::vector<long double> point(bases.size());
 
     for (size_t i = 0; i < bases.size(); i++) {

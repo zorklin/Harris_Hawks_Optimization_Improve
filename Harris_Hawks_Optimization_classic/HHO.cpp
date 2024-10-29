@@ -185,7 +185,6 @@ std::vector<long double> harris_hawks_optimazation(const int T, const int size, 
         if (stagnation > POWER_STAGNATION) {
             gaussian_walk_learning(hho, t, leader_hawk, generator);
             for (int i = 0; i < size; i++) {
-                long double E = calculate_energy(hho, t, generator);
                 very_high_energy(hho, i, leader_hawk, average_hawk, generator);
                 border_correction(hho, i);
                 hho.hawks[i].fitness = hho.fitness(hho.hawks[i].X);
@@ -213,7 +212,7 @@ std::vector<long double> harris_hawks_optimazation(const int T, const int size, 
             stagnation = 0;
             best_solution = iter_solution;
         }
-        //std::cout << "iter: " << t << ", F: " << best_solution.fitness << std::endl;
+        std::cout << "iter: " << t << ", F: " << best_solution.fitness << std::endl;
     }
     return best_solution.X;
 }

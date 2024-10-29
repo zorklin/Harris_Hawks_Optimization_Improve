@@ -2,15 +2,17 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
+#include <algorithm>
+#include <cmath>
 #include "HHO.h"
 #include "benchmark_function.h"
 
 using namespace std;
 using namespace std::chrono;
 
-#define QUANTITY_RUNS 1
+#define QUANTITY_RUNS 10
 
-long double calculate_deviation(vector<long double> values, long double mean) {
+long double calculate_deviation(const vector<long double>& values, const long double mean) {
     size_t size = values.size();
     long double deviation = 0.0l;
 
@@ -20,8 +22,14 @@ long double calculate_deviation(vector<long double> values, long double mean) {
     return sqrt(deviation / size);
 }
 
-int main() {
+long double calculate_median(vector<long double>& values) {
+    size_t size = values.size();
+    sort(values.begin(), values.end());
+    if (size % 2) return values[size / 2];
+    return (values[size / 2 - 1] + values[size / 2]) / 2.0l;
+}
 
+int main() {
     ofstream file("data.txt");
     if (!file.is_open()) {
         cerr << "err opening file" << endl;
@@ -33,15 +41,13 @@ int main() {
 
     cout << "QUANTITY_RUNS: " << QUANTITY_RUNS << endl;
     file << "QUANTITY_RUNS: " << QUANTITY_RUNS << endl;
-    long double total_rank = 0.0l;
     for (int i = 0; i < dimension.size(); i++) {
         cout << endl << "Dimension: " << dimension[i] << endl;
         file << endl << "Dimension: " << dimension[i] << endl;
         vector<long double> borders = get_borders(dimension[i]);
-        long double rank_dimension = 0.0l;
         for (int j = 0; j < QUANTITY_BENCHMARK_FUNCTIONS; j++) {
             long double best_value = INFINITY;
-            long double averege = 0.0l;
+            long double average = 0.0l;
             vector<long double> answers;
             answers.resize(QUANTITY_RUNS);
             double total_duration = 0.0;
@@ -54,30 +60,30 @@ int main() {
                 total_duration += time_span.count();
 
                 long double temp = test_function[j](answer);
-                averege += temp;
+                average += temp;
                 best_value = min(best_value, temp);
                 answers[k] = temp;
             }
-            averege /= QUANTITY_RUNS;
-            long double deviation = calculate_deviation(answers, averege);
+            average /= QUANTITY_RUNS;
+            long double deviation = calculate_deviation(answers, average);
+            long double median = calculate_median(answers);
             double average_time_s = total_duration / QUANTITY_RUNS;
-            rank_dimension += averege;
             cout << "Function: " << j + 1
-                << ", Averege: " << averege
+                << ", Average: " << average
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
+                << ", Median: " << median
                 << ", Average Time: " << average_time_s << " s" << endl;
 
             file << "Function: " << j + 1
-                << ", Averege: " << averege
+                << ", Average: " << average
                 << ", Best: " << best_value
                 << ", Deviation: " << deviation
+                << ", Median: " << median
                 << ", Average Time: " << average_time_s << " s" << endl;
         }
-        total_rank += rank_dimension / QUANTITY_RUNS;
-        cout << "Rank dimension:" << rank_dimension << endl;
     }
-    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl << "Total rank: " << total_rank / dimension.size() << endl;
+    cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl;
 
     return 0;
 }

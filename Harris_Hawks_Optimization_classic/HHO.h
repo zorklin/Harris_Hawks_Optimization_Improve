@@ -16,44 +16,64 @@ struct hawk {
 
     hawk operator+(const hawk& other) const {
         hawk new_hawk = *this;
-
-        std::transform(X.begin(), X.end(), other.X.begin(), new_hawk.X.begin(), std::plus<>());
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] + other.X[i];
+        }
         return new_hawk;
     }
 
     hawk operator-(const hawk& other) const {
         hawk new_hawk = *this;
-        std::transform(X.begin(), X.end(), other.X.begin(), new_hawk.X.begin(), std::minus<>());
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] - other.X[i];
+        }
         return new_hawk;
     }
 
     hawk operator+(long double scalar) const {
         hawk new_hawk = *this;
-        transform(X.begin(), X.end(), new_hawk.X.begin(), [scalar](long double value) { return value + scalar; });
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] + scalar;
+        }
         return new_hawk;
     }
 
     hawk operator-(long double scalar) const {
         hawk new_hawk = *this;
-        transform(X.begin(), X.end(), new_hawk.X.begin(), [scalar](double value) { return value - scalar; });
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] - scalar;
+        }
         return new_hawk;
     }
 
     hawk operator*(long double scalar) const {
         hawk new_hawk = *this;
-        transform(X.begin(), X.end(), new_hawk.X.begin(), [scalar](long double value) { return value * scalar; });
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] * scalar;
+        }
         return new_hawk;
     }
 
     hawk operator/(long double scalar) const {
         hawk new_hawk = *this;
-        transform(X.begin(), X.end(), new_hawk.X.begin(), [scalar](long double value) { return value / scalar; });
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = X[i] / scalar;
+        }
         return new_hawk;
     }
 
     hawk module_number() const {
         hawk new_hawk = *this;
-        transform(X.begin(), X.end(), new_hawk.X.begin(), [](long double value) { return std::fabs(value); });
+        const size_t size = X.size();
+        for (size_t i = 0; i < size; ++i) {
+            new_hawk.X[i] = std::fabs(X[i]);
+        }
         return new_hawk;
     }
 };
@@ -83,4 +103,4 @@ void low_energy_low_chance(HHO& hho, const int index, const long double E, hawk 
 void elite_opposition_based_learning(HHO& hho, std::mt19937& generator);
 long double gaissian_rand(const long double expectations, const long double deviation, std::mt19937& generator);
 void gaussian_walk_learning(HHO& hho, const int t, hawk leader_hawk, std::mt19937& generator);
-std::vector<long double> harris_hawks_optimazation(const int T, const int size, const long double x_max, const long double x_min, const int dimension, long double (*function)(const std::vector<long double>&));
+std::vector<long double> harris_hawks_optimazation(const int T, const int size, const long double max, const long double min, const int dimension, long double (*function)(const std::vector<long double>&));
