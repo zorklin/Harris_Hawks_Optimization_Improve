@@ -24,7 +24,7 @@ int main() {
 
     ofstream file("data.txt");
     if (!file.is_open()) {
-        cerr << "err open file" << endl;
+        cerr << "err opening file" << endl;
         return 1;
     }
 
@@ -46,7 +46,7 @@ int main() {
             answers.resize(QUANTITY_RUNS);
             double total_duration = 0.0;
             for (int k = 0; k < QUANTITY_RUNS; k++) {
-                int T = dimension[i] * 100, size = dimension[i] * 20;
+                int T = 1000, size = 500;
                 high_resolution_clock::time_point start = high_resolution_clock::now();
                 vector<long double> answer = harris_hawks_optimazation(T, size, borders[j], -borders[j], dimension[i], test_function[j]);
                 high_resolution_clock::time_point end = high_resolution_clock::now();
@@ -75,7 +75,7 @@ int main() {
                 << ", Average Time: " << average_time_s << " s" << endl;
         }
         total_rank += rank_dimension / QUANTITY_RUNS;
-        cout << "Rand dimension:" << rank_dimension;
+        cout << "Rank dimension:" << rank_dimension << endl;
     }
     cout << endl << "End of the test for: " << QUANTITY_RUNS << " runs" << endl << "Total rank: " << total_rank / dimension.size() << endl;
 

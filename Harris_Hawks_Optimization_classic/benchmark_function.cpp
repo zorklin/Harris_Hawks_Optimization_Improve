@@ -6,7 +6,7 @@
 constexpr long double PI = 3.141592653589793238462643383279502884l;
 constexpr long double E = 2.71828182845904523536028747135266249775724709369995L;
 
-long double benchmark_f1(std::vector<long double> values) {
+long double benchmark_f1(const std::vector<long double>& values) {
 	size_t size = values.size();
 	long double sum = 0.0l;
 	for (int i = 0; i < size; i++) {
@@ -15,7 +15,7 @@ long double benchmark_f1(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f2(std::vector<long double> values) {
+long double benchmark_f2(const std::vector<long double>& values) {
 	size_t size = values.size();
 	long double sum = 0.0l;
 	for (int i = 0; i < size; i++) {
@@ -24,7 +24,7 @@ long double benchmark_f2(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f3(std::vector<long double> values) {
+long double benchmark_f3(const std::vector<long double>& values) {
 	size_t size = values.size();
 	long double sum = 0.0l;
 	for (int i = 0; i < size; i++) {
@@ -33,7 +33,7 @@ long double benchmark_f3(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f4(std::vector<long double> values) {
+long double benchmark_f4(const std::vector<long double>& values) {
 	size_t size = values.size();
 	long double sum = 0.0l;
 	for (int i = 0; i < size; i++) {
@@ -42,7 +42,7 @@ long double benchmark_f4(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f5(std::vector<long double> values) {
+long double benchmark_f5(const std::vector<long double>& values) {
 	size_t size = values.size();
 	long double sum = 0.0l;
 	for (int i = 0; i < size; i++) {
@@ -51,27 +51,38 @@ long double benchmark_f5(std::vector<long double> values) {
 	return 1.0l - (1.0l + cos(12.0l * sqrt(sum))) / (0.5l * sum + 2.0l);
 }
 
-long double benchmark_f6(std::vector<long double> values) {
-	const long double a = 0.5l, b = 3.0l, k_max = 20.0l;
-	long double temp_sum = 0.0l, sum = 0.0;
+long double benchmark_f6(const std::vector<long double>& values) {
+	const long double a = 0.5l;
+	const long double b = 3.0l;
+	const int k_max = 20;
+
+	long double f_sum = 0.0l;
 	size_t size = values.size();
-	for (int i = 0; i < size; i++) {
-		temp_sum = 0.0l;
-		for (int k = 0; k < k_max; k++) {
-			temp_sum += pow(a, k) * cos(2.0l * PI * pow(b, k) * (values[i] + 0.5l));
-		}
-		sum += temp_sum;
-	}
 
-	temp_sum = 0.0l;
+	std::vector<long double> a_powers(k_max);
+	std::vector<long double> b_powers(k_max);
 	for (int k = 0; k < k_max; k++) {
-		temp_sum += pow(a, k) * cos(PI * pow(b, k));
+		a_powers[k] = pow(a, k);
+		b_powers[k] = pow(b, k);
 	}
 
-	return sum - size * temp_sum;
+	for (size_t i = 0; i < size; i++) {
+		long double temp = 0.0l;
+		for (int k = 0; k < k_max; k++) {
+			temp += a_powers[k] * cos(2.0l * PI * b_powers[k] * (values[i] + 0.5l));
+		}
+		f_sum += temp;
+	}
+
+	long double s_sum = 0.0l;
+	for (int k = 0; k < k_max; k++) {
+		s_sum += a_powers[k] * cos(PI * b_powers[k]);
+	}
+
+	return f_sum - size * s_sum;
 }
 
-long double benchmark_f7(std::vector<long double> values) {
+long double benchmark_f7(const std::vector<long double>& values) {
 	long double sum = 0.0;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -80,7 +91,7 @@ long double benchmark_f7(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f8(std::vector<long double> values) {
+long double benchmark_f8(const std::vector<long double>& values) {
 	long double f_sum = 0.0, s_sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -90,7 +101,7 @@ long double benchmark_f8(std::vector<long double> values) {
 	return -20.0 * pow(E, -0.2l * sqrt(1.0l / size * f_sum)) - pow(E, 1.0l / size * s_sum) + E + 20.0l;
 }
 
-long double benchmark_f9(std::vector<long double> values) {
+long double benchmark_f9(const std::vector<long double>& values) {
 	long double sum = 0.0, product = 1.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -100,7 +111,7 @@ long double benchmark_f9(std::vector<long double> values) {
 	return 1.0l / 4000.0l * sum - product + 1.0l;
 }
 
-long double benchmark_f10(std::vector<long double> values) {
+long double benchmark_f10(const std::vector<long double>& values) {
 	long double sum = 0.0;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -109,7 +120,7 @@ long double benchmark_f10(std::vector<long double> values) {
 	return 10.0l * size + sum;
 }
 
-long double benchmark_f11(std::vector<long double> values) {
+long double benchmark_f11(const std::vector<long double>& values) {
 	const long double a = 0.125l;
 	long double f_sum = 0.0l, s_sum = 0.0l;
 	size_t size = values.size();
@@ -120,7 +131,7 @@ long double benchmark_f11(std::vector<long double> values) {
 	return pow(pow(f_sum - size, 2.0l), a) + ((0.5l * f_sum + s_sum) / size) + 0.5l;
 }
 
-long double benchmark_f12(std::vector<long double> values) {
+long double benchmark_f12(const std::vector<long double>& values) {
 	long double f_sum = 0.0l, s_sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -130,7 +141,7 @@ long double benchmark_f12(std::vector<long double> values) {
 	return sqrt(pow(f_sum, 2.0l) - pow(s_sum, 2.0l)) + ((0.5l * f_sum + s_sum) / size) + 0.5l;
 }
 
-long double benchmark_f13(std::vector<long double> values) {
+long double benchmark_f13(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size() - 1;
 	for (int i = 0; i < size; i++) {
@@ -139,7 +150,7 @@ long double benchmark_f13(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f14(std::vector<long double> values) {
+long double benchmark_f14(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -148,7 +159,7 @@ long double benchmark_f14(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f15(std::vector<long double> values) {
+long double benchmark_f15(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 1; i < size; i++) {
@@ -157,7 +168,7 @@ long double benchmark_f15(std::vector<long double> values) {
 	return 1000000.0l * pow(values[0], 2.0l) + sum;
 }
 
-long double benchmark_f16(std::vector<long double> values) {
+long double benchmark_f16(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 1; i < size; i++) {
@@ -166,7 +177,7 @@ long double benchmark_f16(std::vector<long double> values) {
 	return pow(values[0], 2.0l) + sum;
 }
 
-long double benchmark_f17(std::vector<long double> values) {
+long double benchmark_f17(const std::vector<long double>& values) {
 	const long double b = 0.5l;
 	long double sum = 0.0l, temp_sum = 0.0;
 	size_t size = values.size();
@@ -180,7 +191,7 @@ long double benchmark_f17(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f18(std::vector<long double> values) {
+long double benchmark_f18(const std::vector<long double>& values) {
 	long double sum = 0.0l, s = 0.0l;
 	size_t size = values.size() - 1;
 	for (int i = 0; i < size; i++) {
@@ -190,7 +201,7 @@ long double benchmark_f18(std::vector<long double> values) {
 	return pow((1.0l / size) * sum, 2.0l);
 }
 
-long double benchmark_f19(std::vector<long double> values) {
+long double benchmark_f19(const std::vector<long double>& values) {
 	long double sum = 0.0l, g = 0.0l, temp = 0.0;
 	size_t size = values.size() - 1;
 	for (int i = 0; i < size; i++) {
@@ -203,7 +214,7 @@ long double benchmark_f19(std::vector<long double> values) {
 	return sum + g;
 }
 
-long double benchmark_f20(std::vector<long double> values) {
+long double benchmark_f20(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -212,7 +223,7 @@ long double benchmark_f20(std::vector<long double> values) {
 	return sum;
 }
 
-long double benchmark_f21(std::vector<long double> values) {
+long double benchmark_f21(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -221,7 +232,7 @@ long double benchmark_f21(std::vector<long double> values) {
 	return -sum + 418.9828872724337l * size;
 }
 
-long double benchmark_f22(std::vector<long double> values) {
+long double benchmark_f22(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -230,7 +241,7 @@ long double benchmark_f22(std::vector<long double> values) {
 	return sqrt(sum);
 }
 
-long double benchmark_f23(std::vector<long double> values) {
+long double benchmark_f23(const std::vector<long double>& values) {
 	long double f_sum = 0.0l, s_sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -240,7 +251,7 @@ long double benchmark_f23(std::vector<long double> values) {
 	return f_sum * pow(E, -s_sum);
 }
 
-long double benchmark_f24(std::vector<long double> values) {
+long double benchmark_f24(const std::vector<long double>& values) {
 	long double max = -INFINITY;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -250,7 +261,7 @@ long double benchmark_f24(std::vector<long double> values) {
 	return max;
 }
 
-long double benchmark_f25(std::vector<long double> values) {
+long double benchmark_f25(const std::vector<long double>& values) {
 	long double sum = 0.0l, product = 1.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -260,7 +271,7 @@ long double benchmark_f25(std::vector<long double> values) {
 	return sum + product;
 }
 
-long double benchmark_f26(std::vector<long double> values) {
+long double benchmark_f26(const std::vector<long double>& values) {
 	long double sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -269,7 +280,7 @@ long double benchmark_f26(std::vector<long double> values) {
 	return 1.0l - cos(2.0l * PI * sqrt(sum)) + 0.1l * sqrt(sum);
 }
 
-long double benchmark_f27(std::vector<long double> values) {
+long double benchmark_f27(const std::vector<long double>& values) {
 	const long double d = 2.0l, a = 0.1l;
 	long double sum = 0.0l;
 	size_t size = values.size();
@@ -279,7 +290,7 @@ long double benchmark_f27(std::vector<long double> values) {
 	return fabs(values[0]) + d * pow(sum, a);
 }
 
-long double benchmark_f28(std::vector<long double> values) {
+long double benchmark_f28(const std::vector<long double>& values) {
 	long double f_sum = 0.0l, s_sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -289,7 +300,7 @@ long double benchmark_f28(std::vector<long double> values) {
 	return f_sum + pow(s_sum, 2.0) + pow(s_sum, 4.0);
 }
 
-long double benchmark_f29(std::vector<long double> values) {
+long double benchmark_f29(const std::vector<long double>& values) {
 	long double f_sum = 0.0l, s_sum = 0.0l, product = 1.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {
@@ -300,7 +311,7 @@ long double benchmark_f29(std::vector<long double> values) {
 	return 10000.0l * (1.0l + (pow(E, -f_sum) - 2.0l * pow(E, -s_sum)) * product);
 }
 
-long double benchmark_f30(std::vector<long double> values) {
+long double benchmark_f30(const std::vector<long double>& values) {
 	long double f_sum = 0.0l, s_sum = 0.0l, t_sum = 0.0l;
 	size_t size = values.size();
 	for (int i = 0; i < size; i++) {

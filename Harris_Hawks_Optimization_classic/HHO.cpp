@@ -14,17 +14,17 @@ std::mt19937 initialization_rand() {
     return std::mt19937(rand_number());
 }
 
-long double rand_real(std::mt19937& generator, long double low, long double high) {
+long double rand_real(std::mt19937& generator, const long double low, const long double high) {
     std::uniform_real_distribution<long double> range(low, high);
     return range(generator);
 }
 
-int rand_int(std::mt19937& generator, int low, int high) {
+int rand_int(std::mt19937& generator, const int low, const int high) {
     std::uniform_int_distribution<int> range(low, high);
     return range(generator);
 }
 
-HHO initialization_hawks(int T, int size, long double max, long double min, int dimension, long double (*function)(std::vector<long double>)) {
+HHO initialization_hawks(const int T, const int size, const long double max, const long double min, const int dimension, long double (*function)(const std::vector<long double>&)) {
     HHO hho;
     hho.T = T;
     hho.size = size;
@@ -34,7 +34,7 @@ HHO initialization_hawks(int T, int size, long double max, long double min, int 
     hho.fitness = function;
     hho.hawks.resize(size);
 
-    std::vector<int> bases = sieve_eratosthenes(dimension);
+    const std::vector<int> bases = sieve_eratosthenes(dimension);
     for (int i = 0; i < size; i++) {
         hawk temp = halton_sequence(i, bases);
         hho.hawks[i] = temp * (max - min) + min;
@@ -43,14 +43,14 @@ HHO initialization_hawks(int T, int size, long double max, long double min, int 
 
     return hho;
 }
-
-void border_correction(HHO& hho, int index) {
+ 
+void border_correction(HHO& hho, const int index) {
     for (int i = 0; i < hho.dimension; i++) {
         hho.hawks[index].X[i] = std::max(std::min(hho.hawks[index].X[i], hho.max), hho.min);
     }
 }
 
-hawk best_hawk(HHO& hho) {
+hawk best_hawk(const HHO& hho) {
     hawk best_hawk = hho.hawks[0];
     for (int i = 1; i < hho.size; i++) {
         if (hho.hawks[i].fitness < best_hawk.fitness) {
@@ -60,7 +60,7 @@ hawk best_hawk(HHO& hho) {
     return best_hawk;
 }
 
-hawk calculate_Xm(HHO& hho) {
+hawk calculate_Xm(const HHO& hho) {
     hawk average_hawk(0.0l, hho.dimension);
     for (int i = 0; i < hho.size; i++) {
         average_hawk = average_hawk + hho.hawks[i];
@@ -68,7 +68,7 @@ hawk calculate_Xm(HHO& hho) {
     return average_hawk / hho.size;
 }
 
-long double calculate_energy(HHO& hho, int t, std::mt19937& generator) {
+long double calculate_energy(const HHO& hho, const int t, std::mt19937& generator) {
     long double E = pow(cos(PI * pow(static_cast<long double>(t) / hho.T, 2.0l / 3.0l)), 5.0l) + 1.0l;
     return E * rand_real(generator, -1.0, 1.0);
 }
@@ -87,31 +87,31 @@ void very_high_energy(HHO& hho, int index, hawk leader_hawk, hawk averege_hawk, 
     }
 }
 
-void high_energy_high_chance(HHO& hho, int index, long double E, hawk leader_hawk, std::mt19937& generator) {
+void high_energy_high_chance(HHO& hho, const int index, const long double E, hawk leader_hawk, std::mt19937& generator) {
     long double J = rand_real(generator, 0.0l, 1.0l);
     hawk diff_hawk = leader_hawk - hho.hawks[index];
     hho.hawks[index] = diff_hawk - (leader_hawk * J - hho.hawks[index]).module_number() * E;
 }
 
-void low_energy_high_chance(HHO& hho, int index, long double E, hawk leader_hawk) {
+void low_energy_high_chance(HHO& hho, const int index, const long double E, hawk leader_hawk) {
     hawk diff_hawk = leader_hawk - hho.hawks[index];
     hho.hawks[index] = leader_hawk - diff_hawk.module_number() * E;
 }
 
-hawk better(HHO& hho, hawk f_hawk, hawk s_hawk) {
+hawk better(const HHO& hho, const hawk f_hawk, const hawk s_hawk) {
     if (hho.fitness(f_hawk.X) < hho.fitness(s_hawk.X)) return f_hawk;
     return s_hawk;
 }
 
 long double levy_flight(std::mt19937& generator) {
-    long double u = rand_real(generator, 0.0l, 1.0l), v = rand_real(generator, 0.0l, 1.0l);
-    long double numerator = tgamma(1.0l + beta) * sin((PI * beta) / 2.0l);
-    long double denominator = tgamma((1.0l + beta) / 2.0l) * beta * pow(2.0l, (beta - 1.0l) / 2.0l);
-    long double sigma = pow(numerator / denominator, 1.0 / beta);
+    const long double u = rand_real(generator, 0.0l, 1.0l), v = rand_real(generator, 0.0l, 1.0l);
+    const long double numerator = tgamma(1.0l + beta) * sin((PI * beta) / 2.0l);
+    const long double denominator = tgamma((1.0l + beta) / 2.0l) * beta * pow(2.0l, (beta - 1.0l) / 2.0l);
+    const long double sigma = pow(numerator / denominator, 1.0 / beta);
     return 0.01l * ((u * sigma) / pow(fabs(v), 1.0l / beta));
 }
 
-void high_energy_low_chance(HHO& hho, int t, int index, long double E, hawk leader_hawk, std::mt19937& generator) {
+void high_energy_low_chance(HHO& hho, const int index, const long double E, hawk leader_hawk, std::mt19937& generator) {
     long double J = rand_real(generator, 0.0l, 1.0l);
     hawk y_hawk = leader_hawk - (leader_hawk * J - hho.hawks[index]).module_number() * E;
     hawk rand_hawk(0.0l, hho.dimension);
@@ -122,7 +122,7 @@ void high_energy_low_chance(HHO& hho, int t, int index, long double E, hawk lead
     hho.hawks[index] = better(hho, better(hho, y_hawk, hho.hawks[index]), z_hawk);
 }
 
-void low_energy_low_chance(HHO& hho, int t, int index, long double E, hawk leader_hawk, hawk averege_hawk, std::mt19937& generator) {
+void low_energy_low_chance(HHO& hho, const int index, const long double E, hawk leader_hawk, hawk averege_hawk, std::mt19937& generator) {
     long double J = rand_real(generator, 0.0l, 1.0l);
     hawk rand_hawk(0.0l, hho.dimension);
     for (int i = 0; i < hho.dimension; i++) {
@@ -154,12 +154,12 @@ void elite_opposition_based_learning(HHO& hho, std::mt19937& generator) {
     }
 }
 
-long double gaissian_rand(long double expectations, long double deviation, std::mt19937& generator) {
+long double gaissian_rand(const long double expectations, const long double deviation, std::mt19937& generator) {
     std::normal_distribution<> dist(expectations, deviation);
     return dist(generator);
 }
 
-void gaussian_walk_learning(HHO& hho, int t, hawk leader_hawk, std::mt19937& generator) {
+void gaussian_walk_learning(HHO& hho, const int t, hawk leader_hawk, std::mt19937& generator) {
     hho.hawks[0] = leader_hawk;
     for (int i = 1; i < hho.size; i++) {
         int index = rand_int(generator, 0, hho.size - 1);
@@ -172,7 +172,7 @@ void gaussian_walk_learning(HHO& hho, int t, hawk leader_hawk, std::mt19937& gen
     }
 }
 
-std::vector<long double> harris_hawks_optimazation(int T, int size, long double max, long double min, int dimension, long double (*function)(std::vector<long double>)) {
+std::vector<long double> harris_hawks_optimazation(const int T, const int size, const long double max, const long double min, const int dimension, long double (*function)(const std::vector<long double>&)) {
     std::mt19937 generator = initialization_rand();
     HHO hho = initialization_hawks(T, size, max, min, dimension, function);
     hawk best_solution(INFINITY, dimension);
@@ -200,8 +200,8 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
                     long double q = rand_real(generator, 0.0l, 1.0l);
                     if (fabs(E) >= 0.5l && q >= 0.5l) high_energy_high_chance(hho, i, E, leader_hawk, generator);
                     else if (fabs(E) < 0.5l && q >= 0.5l) low_energy_high_chance(hho, i, E, leader_hawk);
-                    else if (fabs(E) >= 0.5l && q < 0.5l) high_energy_low_chance(hho, t, i, E, leader_hawk, generator);
-                    else if (fabs(E) < 0.5l && q < 0.5l) low_energy_low_chance(hho, t, i, E, leader_hawk, average_hawk, generator);
+                    else if (fabs(E) >= 0.5l && q < 0.5l) high_energy_low_chance(hho, i, E, leader_hawk, generator);
+                    else if (fabs(E) < 0.5l && q < 0.5l) low_energy_low_chance(hho, i, E, leader_hawk, average_hawk, generator);
                 }
                 border_correction(hho, i);
                 hho.hawks[i].fitness = hho.fitness(hho.hawks[i].X);
@@ -213,6 +213,7 @@ std::vector<long double> harris_hawks_optimazation(int T, int size, long double 
             stagnation = 0;
             best_solution = iter_solution;
         }
+        //std::cout << "iter: " << t << ", F: " << best_solution.fitness << std::endl;
     }
     return best_solution.X;
 }
