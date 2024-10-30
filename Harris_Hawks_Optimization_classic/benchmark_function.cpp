@@ -195,21 +195,6 @@ long double benchmark_f17(const std::vector<long double>& values) {
 	return sum;
 }
 
-/*long double benchmark_f17(const std::vector<long double>& values) {
-	const long double b = 0.5l;
-	long double sum = 0.0l;
-	size_t size = values.size();
-
-	for (int i = 0; i < size; i++) {
-		long double temp_sum = 0.0;
-		for (int j = 0; j < size; j++) {
-			temp_sum += (pow(j + 1, i + 1) + b) * (pow(values[j] / (j + 1), i + 1) - 1.0l);
-		}
-		sum += pow(temp_sum, 2.0l);
-	}
-	return sum;
-}*/
-
 long double benchmark_f18(const std::vector<long double>& values) {
 	long double sum = 0.0l, s = 0.0l;
 	size_t size = values.size() - 1;
