@@ -212,7 +212,6 @@ std::vector<long double> harris_hawks_optimazation(const int T, const int size, 
             stagnation = 0;
             best_solution = iter_solution;
         }
-        std::cout << "iter: " << t << ", F: " << best_solution.fitness << std::endl;
     }
     return best_solution.X;
 }

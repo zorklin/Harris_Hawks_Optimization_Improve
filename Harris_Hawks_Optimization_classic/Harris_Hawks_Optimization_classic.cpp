@@ -52,7 +52,7 @@ int main() {
             answers.resize(QUANTITY_RUNS);
             double total_duration = 0.0;
             for (int k = 0; k < QUANTITY_RUNS; k++) {
-                int T = 1000, size = 500;
+                int T = 100, size = 500;
                 high_resolution_clock::time_point start = high_resolution_clock::now();
                 vector<long double> answer = harris_hawks_optimazation(T, size, borders[j], -borders[j], dimension[i], test_function[j]);
                 high_resolution_clock::time_point end = high_resolution_clock::now();
