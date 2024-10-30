@@ -2,8 +2,6 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
-#include <algorithm>
-#include <cmath>
 #include "HHO.h"
 #include "benchmark_function.h"
 
@@ -36,7 +34,7 @@ int main() {
         return 1;
     }
 
-    vector<int> dimension = { 5, 10, 30 };
+    vector<int> dimension = { 30 };
     vector<benchmark_function> test_function = get_all_functions();
 
     cout << "QUANTITY_RUNS: " << QUANTITY_RUNS << endl;

@@ -1,17 +1,3 @@
 QUANTITY_RUNS: 1
 
 Dimension: 30
-Function: 17, Average: 4.89816e+79, Best: 4.89816e+79, Deviation: 0, Median: 4.89816e+79, Average Time: 274.815 s
-Function: 18, Average: 2.94445e-26, Best: 2.94445e-26, Deviation: 0, Median: 2.94445e-26, Average Time: 19.5483 s
-Function: 19, Average: 0, Best: 0, Deviation: 0, Median: 0, Average Time: 16.5432 s
-Function: 20, Average: 1.1168e-47, Best: 1.1168e-47, Deviation: 0, Median: 1.1168e-47, Average Time: 5.04937 s
-Function: 21, Average: 3660.56, Best: 3660.56, Deviation: 0, Median: 3660.56, Average Time: 5.53956 s
-Function: 22, Average: 6.03835e-27, Best: 6.03835e-27, Deviation: 0, Median: 6.03835e-27, Average Time: 6.01037 s
-Function: 23, Average: 3.51275e-12, Best: 3.51275e-12, Deviation: 0, Median: 3.51275e-12, Average Time: 8.07307 s
-Function: 24, Average: 1.81822e-24, Best: 1.81822e-24, Deviation: 0, Median: 1.81822e-24, Average Time: 2.82989 s
-Function: 25, Average: 2.10323e-26, Best: 2.10323e-26, Deviation: 0, Median: 2.10323e-26, Average Time: 4.12695 s
-Function: 26, Average: 1.31656e-25, Best: 1.31656e-25, Deviation: 0, Median: 1.31656e-25, Average Time: 5.11172 s
-Function: 27, Average: 0.00827754, Best: 0.00827754, Deviation: 0, Median: 0.00827754, Average Time: 2.92618 s
-Function: 28, Average: 1.18105e-28, Best: 1.18105e-28, Deviation: 0, Median: 1.18105e-28, Average Time: 6.03425 s
-Function: 29, Average: 0, Best: 0, Deviation: 0, Median: 0, Average Time: 12.2376 s
-Function: 30, Average: 8.10758e-07, Best: 8.10758e-07, Deviation: 0, Median: 8.10758e-07, Average Time: 16.5359 s

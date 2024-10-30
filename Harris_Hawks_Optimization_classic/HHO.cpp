@@ -2,7 +2,6 @@
 
 #include "halton_sequence.h"
 #include "HHO.h"
-#include <algorithm>
 
 constexpr long double beta = 1.5l;
 constexpr long double PI = 3.141592653589793238462643383279502884l;
@@ -24,6 +23,11 @@ int rand_int(std::mt19937& generator, const int low, const int high) {
     return range(generator);
 }
 
+long double gaissian_rand(const long double expectations, const long double deviation, std::mt19937& generator) {
+    std::normal_distribution<> dist(expectations, deviation);
+    return dist(generator);
+}
+
 HHO initialization_hawks(const int T, const int size, const long double max, const long double min, const int dimension, long double (*function)(const std::vector<long double>&)) {
     HHO hho;
     hho.T = T;
@@ -42,12 +46,6 @@ HHO initialization_hawks(const int T, const int size, const long double max, con
     }
 
     return hho;
-}
- 
-void border_correction(HHO& hho, const int index) {
-    for (int i = 0; i < hho.dimension; i++) {
-        hho.hawks[index].X[i] = std::max(std::min(hho.hawks[index].X[i], hho.max), hho.min);
-    }
 }
 
 hawk best_hawk(const HHO& hho) {
@@ -154,9 +152,10 @@ void elite_opposition_based_learning(HHO& hho, std::mt19937& generator) {
     }
 }
 
-long double gaissian_rand(const long double expectations, const long double deviation, std::mt19937& generator) {
-    std::normal_distribution<> dist(expectations, deviation);
-    return dist(generator);
+void border_correction(HHO& hho, const int index) {
+    for (int i = 0; i < hho.dimension; i++) {
+        hho.hawks[index].X[i] = std::max(std::min(hho.hawks[index].X[i], hho.max), hho.min);
+    }
 }
 
 void gaussian_walk_learning(HHO& hho, const int t, hawk leader_hawk, std::mt19937& generator) {
